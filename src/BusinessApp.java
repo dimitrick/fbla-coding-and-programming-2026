@@ -86,14 +86,7 @@ public class BusinessApp extends Application {
         scrollPane.setFitToWidth(true);
         VBox.setVgrow(scrollPane, Priority.ALWAYS);
 
-        // STATUS BAR
-        HBox statusBar = new HBox();
-        statusBar.setStyle("-fx-background-color: #f8fafc; -fx-padding: 12 30; -fx-border-color: #e2e8f0; -fx-border-width: 1 0 0 0;");
-        Label footerTxt = new Label("Systems Active \u2022 " + manager.getTopRated().size() + " Entries Loaded");
-        footerTxt.setStyle("-fx-text-fill: #64748b; -fx-font-size: 11;");
-        statusBar.getChildren().add(footerTxt);
-
-        VBox root = new VBox(0, header, filterBar, scrollPane, statusBar);
+        VBox root = new VBox(0, header, filterBar, scrollPane);
         Scene scene = new Scene(root);
         scene.getStylesheets().add("data:text/css," + styleCSS);
         
@@ -102,6 +95,16 @@ public class BusinessApp extends Application {
         stage.show();
     }
 
+
+
+
+
+
+
+
+
+
+    
     private HBox createBusinessBlob(Business b) {
         HBox blob = new HBox(25);
         blob.setPadding(new Insets(20));
