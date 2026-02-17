@@ -1,3 +1,4 @@
+// Basic class to store businesses
 public class Business {
     private String name;
     private String category;
@@ -19,7 +20,7 @@ public class Business {
         this.rating = Math.round((totalPoints / this.reviewCount) * 10.0) / 10.0;
     }
 
-    // Getters (Required by JavaFX TableView)
+    // Getters
     public String getName() { return name; }
     public String getCategory() { return category; }
     public double getRating() { return rating; }

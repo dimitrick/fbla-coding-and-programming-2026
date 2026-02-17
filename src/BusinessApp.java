@@ -28,6 +28,7 @@ public class BusinessApp extends Application {
 
     @Override
     public void start(Stage stage) {
+        // Bot check before the program launches
         if (!runVerification()) System.exit(0);
 
         loadDataFromJson("./src/data.json");
@@ -36,7 +37,7 @@ public class BusinessApp extends Application {
         stage.setWidth(950);
         stage.setHeight(850);
 
-        // --- MODERN PRO STYLING ---
+        // CSS STYLING
         String styleCSS = """
             .root { -fx-background-color: #fcfcfc; }
             .scroll-pane { -fx-background-color: transparent; -fx-background-insets: 0; }
@@ -45,7 +46,7 @@ public class BusinessApp extends Application {
             .search-bar { -fx-background-color: white; -fx-padding: 20; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.05), 10, 0, 0, 5); }
             """;
 
-        // HEADER (Modern Gradient)
+        // HEADER
         VBox header = new VBox(5);
         header.setStyle("-fx-background-color: #8497c7; -fx-padding: 30;");
         Label title = new Label("RateTheA");
@@ -108,19 +109,19 @@ public class BusinessApp extends Application {
         blob.setMaxWidth(850);
         blob.setStyle("-fx-background-color: white; -fx-background-radius: 20; -fx-border-color: #f1f5f9; -fx-border-radius: 20;");
         
-        // Shadow Effect
+        // Drop Shadow Effect
         DropShadow ds = new DropShadow();
         ds.setRadius(12);
         ds.setOffsetY(4);
         ds.setColor(Color.rgb(0, 0, 0, 0.1));
         blob.setEffect(ds);
 
-        // 1. Icon / Circle Initial
+        // Icon for Locations
         StackPane iconPane = new StackPane();
         Circle circle = new Circle(20, Color.web("#a4c1de"));
         iconPane.getChildren().addAll(circle);
 
-        // 2. Info Section (Name & Category)
+        // Info Section (Name & Category)
         VBox info = new VBox(5);
         Label name = new Label(b.getName());
         name.setStyle("-fx-font-size: 18; -fx-font-weight: bold; -fx-text-fill: #1e293b;");
@@ -128,7 +129,7 @@ public class BusinessApp extends Application {
         cat.setStyle("-fx-text-fill: #64748b; -fx-font-size: 13;");
         info.getChildren().addAll(name, cat);
 
-        // 3. Rating Section
+        // Rating Section
         HBox ratingBox = new HBox(5);
         ratingBox.setAlignment(Pos.CENTER);
         Label star = new Label("\u2605");
@@ -141,7 +142,7 @@ public class BusinessApp extends Application {
         Region spacer = new Region();
         HBox.setHgrow(spacer, Priority.ALWAYS);
 
-        // 4. Action Button
+        // Rate Button
         Button rateBtn = new Button("Add Rating");
         rateBtn.setStyle("-fx-background-color: #f8fafc; -fx-border-color: #e2e8f0; -fx-border-radius: 8; -fx-padding: 8 15;");
         rateBtn.setOnAction(e -> showRatingDialog(b));
@@ -155,6 +156,7 @@ public class BusinessApp extends Application {
         return blob;
     }
 
+    // Updates the list view to ensure all businesses are included
     private void updateListView(List<Business> list) {
         listContainer.getChildren().clear();
         for (Business b : list) {
@@ -162,6 +164,7 @@ public class BusinessApp extends Application {
         }
     }
 
+    // Filters the list of businesses based on search and category filter
     private void runCombinedFilter() {
         String query = searchField.getText().toLowerCase().trim();
         String cat = categoryPicker.getValue();
@@ -172,6 +175,7 @@ public class BusinessApp extends Application {
         updateListView(filtered);
     }
 
+    // Goes through the JSON file to see if there are new categories not listed on the dropdown
     private void refreshCategoryPicker() {
         Set<String> categories = manager.getTopRated().stream()
                                     .map(Business::getCategory)
@@ -183,6 +187,7 @@ public class BusinessApp extends Application {
         categoryPicker.setStyle("-fx-background-radius: 20; -fx-padding: 5 15;");
     }
 
+    // Displays a dialog to rate a business (appears when you click the "Rate" button)
     private void showRatingDialog(Business b) {
         Dialog<Integer> dialog = new Dialog<>();
         dialog.setTitle("Review");
@@ -212,12 +217,15 @@ public class BusinessApp extends Application {
         });
     }
 
+    // Parses JSON manually with a string by reading through the file and splitting it by "objects" (where the "}" substrings are)
     private void loadDataFromJson(String filename) {
         try (Scanner sc = new Scanner(new File(filename))) {
             StringBuilder sb = new StringBuilder();
-            while (sc.hasNextLine()) sb.append(sc.nextLine());
+            while (sc.hasNextLine()) 
+                sb.append(sc.nextLine());
             String c = sb.toString().trim();
-            if (!c.contains("[")) return;
+            if (!c.contains("[")) 
+                return;
             c = c.substring(c.indexOf("[")+1, c.lastIndexOf("]"));
             String[] objects = c.split("\\},");
             for (String obj : objects) {
@@ -227,13 +235,19 @@ public class BusinessApp extends Application {
         } catch (Exception e) {}
     }
 
+    // String obj - equal to the single object of a business in the JSON file
+    // Used to find a certain aspect of a business: i.e. to find its category, we can make key equal to "category"
     private String findV(String obj, String key) {
+        // Splits the obj by commas to separate the name, category, and rating
         for (String pair : obj.split(",")) {
-            if (pair.contains("\"" + key + "\"")) return pair.split(":")[1].replace("\"", "").trim();
+            if (pair.contains("\"" + key + "\"")) 
+                // If we find what we're looking for, we return it without commas or spaces
+                return pair.split(":")[1].replace("\"", "").trim();
         }
         return "";
     }
 
+    // Saves the current list of businesses to the data.json file
     private void saveDataToJson(String filename) {
         try (java.io.PrintWriter writer = new java.io.PrintWriter(new File(filename))) {
             writer.println("[");
@@ -247,8 +261,9 @@ public class BusinessApp extends Application {
         } catch (Exception e) {}
     }
 
+    // Bot Verification: Picks a number between 1 and 10
     private boolean runVerification() {
-        int n1 = (int)(Math.random()*10)+1, n2 = (int)(Math.random()*10)+1;
+        int n1 = (int)(Math.random() * 10) + 1, n2 = (int)(Math.random() * 10) + 1;
         TextInputDialog tid = new TextInputDialog();
         tid.setTitle("Access Check");
         tid.setHeaderText("Verify you are human: " + n1 + " + " + n2);
