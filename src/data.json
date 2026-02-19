@@ -1,5 +1,4 @@
 [
-  {"name":"Ballstonian Urban Patisserie","category":"Cafe","rating":5.0},
   {"name":"Heidelberg Pastry Shoppe","category":"Bakery","rating":4.8},
   {"name":"Ayers Variety & Hardware","category":"Hardware Store","rating":4.8},
   {"name":"Gute Leute","category":"Cafe","rating":4.7},
@@ -51,5 +50,6 @@
   {"name":"Econo Lodge Metro","category":"Hotel","rating":3.9},
   {"name":"Planet Fitness","category":"Gym","rating":3.9},
   {"name":"Comfort Inn","category":"Hotel","rating":3.8},
-  {"name":"McDonald's","category":"Restaurant","rating":3.8}
+  {"name":"McDonald's","category":"Restaurant","rating":3.8},
+  {"name":"Ballstonian Urban Patisserie","category":"Cafe","rating":3.0}
 ]
